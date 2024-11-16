@@ -1,44 +1,24 @@
 
-from fhir.resources.patient import Patient
-from fhir.resources.humanname import HumanName
-from fhir.resources.contactpoint import ContactPoint
+from patient_with_id import create_patient_resource
+from base import send_resource_to_hapi_fhir, get_resource_from_hapi_fhir
 
-# Crear el recurso FHIR de paciente con parámetros opcionales
-def create_patient_resource(family_name=None, given_name=None, birth_date=None, gender=None, phone=None, document_number=None):
-    patient = Patient()
-    
-    # Agregar el nombre del paciente si está disponible
-    if family_name or given_name:
-        name = HumanName()
-        if family_name:
-            name.family = family_name
-        if given_name:
-            name.given = [given_name]
-        patient.name = [name]
-    
-    # Agregar la fecha de nacimiento si está disponible
-    if birth_date:
-        patient.birthDate = birth_date
+# Parámetros del paciente (usando los datos de Milhouse Martinez)
+family_name = "Martinez"
+given_name = "Milhouse"
+birth_date = "1993-09-10"
+gender = "male"
+phone = "+1123456789"  # Número de teléfono de ejemplo
+document_number = "35783587"  # Número de documento
 
-    # Agregar el género si está disponible
-    if gender:
-        patient.gender = gender
+# Crear el recurso de paciente con identificador
+patient_with_id = create_patient_resource(family_name, given_name, birth_date, gender, phone, document_number)
 
-    # Agregar información de contacto si está disponible
-    if phone:
-        contact = ContactPoint()
-        contact.system = "phone"
-        contact.value = phone
-        contact.use = "mobile"
-        patient.telecom = [contact]
-    
-    # Agregar el identificador (número de documento) si está disponible
-    if document_number:
-        patient.identifier = [{
-            "use": "official",  # Identificador oficial
-            "system": "http://argentina.gob/dni",  # Sistema de emisión del documento
-            "value": document_number  # Número de documento
-        }]
-    
-    return patient
+patient_id = send_resource_to_hapi_fhir(patient_with_id, 'Patient')
 
+# Si el paciente fue creado exitosamente, obtener el recurso del paciente
+if patient_id:
+    print(f"Paciente con ID {patient_id} creado exitosamente.")
+    # Ahora leer el recurso de paciente usando el ID
+    get_resource_from_hapi_fhir(patient_id, 'Patient')
+else:
+    print("Error al crear el paciente.")
