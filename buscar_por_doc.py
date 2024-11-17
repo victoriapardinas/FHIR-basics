@@ -1,13 +1,12 @@
 
 import requests
 
-# Buscar paciente por documento (identifier)
+# Buscar paciente por documento
 def search_patient_by_document(document_number):
     url = f"http://hapi.fhir.org/baseR4/Patient?identifier={document_number}"
     response = requests.get(url, headers={"Accept": "application/fhir+json"})
 
     if response.status_code == 200:
-        # Si la búsqueda es exitosa, devuelve los resultados
         patients = response.json().get('entry', [])
         
         if patients:
