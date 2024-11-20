@@ -7,7 +7,7 @@ Lectura y escritura de recursos en el servidor público de HAPI FHIR.
 ## Workflow
 Desde acá se corre el código. 
 
-##TPVI
+## TPVI
 En la carpeta TPVI se encontrara el repositorio de nuestro trabajo práctico de interoperabilidad
 - *patient_with_id.py* corresponde al codigo que permite crear un recurso patient con un documento nacional de identidad.
 - *prueba_paciente.py* es la validación del código anterior, donde insertamos la información correspondiente a un paciente ficiticio
